@@ -14,13 +14,61 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="com.example.ivandimitrov.mutitreadingtask.MainActivity">
 
-    <com.example.ivandimitrov.mutitreadingtask.CountdownIndicator
-        android:id="@+id/countdown_icon"
-        style="?attr/accountListWithVerificationCodesRowCountdownIndicator"
-        android:layout_width="32dip"
-        android:layout_height="32dip"
-        app:draw_direction="clockwise"
-        app:from_color="#00FF00"
-        app:start_degree="90"
-        app:to_color="#FF0000"/>
+    <LinearLayout
+        android:id="@+id/countdown_layout_1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingLeft="60dp"
+        >
+
+        <com.example.ivandimitrov.mutitreadingtask.CountdownIndicator
+            android:id="@+id/countdown_icon_1"
+            style="?attr/accountListWithVerificationCodesRowCountdownIndicator"
+            android:layout_width="32dip"
+            android:layout_height="32dip"
+            app:draw_direction="clockwise"
+            app:from_color="#00FF00"
+            app:start_degree="90"
+            app:to_color="#FF0000"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/countdown_layout_2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@id/countdown_layout_1"
+        android:paddingLeft="60dp"
+        >
+
+        <com.example.ivandimitrov.mutitreadingtask.CountdownIndicator
+            android:id="@+id/countdown_icon_2"
+            style="?attr/accountListWithVerificationCodesRowCountdownIndicator"
+            android:layout_width="32dip"
+            android:layout_height="32dip"
+            android:paddingLeft="20dp"
+            app:draw_direction="clockwise"
+            app:from_color="#00FF00"
+            app:start_degree="90"
+            app:to_color="#FF0000"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/countdown_layout_3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@id/countdown_layout_2"
+        android:paddingLeft="60dp"
+        >
+
+        <com.example.ivandimitrov.mutitreadingtask.CountdownIndicator
+            android:id="@+id/countdown_icon_3"
+            style="?attr/accountListWithVerificationCodesRowCountdownIndicator"
+            android:layout_width="32dip"
+            android:layout_height="32dip"
+            android:layout_toRightOf="@id/countdown_icon_2"
+            app:draw_direction="clockwise"
+            app:from_color="#00FF00"
+            app:start_degree="90"
+            app:to_color="#FF0000"/>
+    </LinearLayout>
 </RelativeLayout>
