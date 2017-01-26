@@ -4,6 +4,15 @@ package com.example.ivandimitrov.mutitreadingtask;
  * Created by Ivan Dimitrov on 1/25/2017.
  */
 
+import android.app.Activity;
+import android.os.Handler;
+import android.os.Looper;
+import android.os.Message;
+import android.os.StrictMode;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.BufferedInputStream;
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -14,16 +23,6 @@ import java.net.URL;
 import java.util.Random;
 import java.util.Timer;
 import java.util.TimerTask;
-
-import android.app.Activity;
-import android.os.Handler;
-import android.os.Looper;
-import android.os.Message;
-import android.os.StrictMode;
-import android.util.Log;
-
-import org.json.JSONException;
-import org.json.JSONObject;
 
 
 public class CNTruthTask extends Thread {
@@ -90,6 +89,7 @@ public class CNTruthTask extends Thread {
 
     public void stopThreadTimer() {
         mTimer.cancel();
+        Looper.myLooper().quit();
     }
 
     private void onTimerComplete() {

@@ -18,6 +18,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="vertical"
+        android:paddingBottom="60dp"
         >
 
         <TextView
@@ -44,6 +45,7 @@
         android:layout_height="wrap_content"
         android:layout_toRightOf="@id/countdown_layout_1"
         android:orientation="vertical"
+        android:paddingBottom="60dp"
         android:paddingLeft="60dp">
 
         <TextView
@@ -72,6 +74,7 @@
         android:layout_height="wrap_content"
         android:layout_toRightOf="@id/countdown_layout_2"
         android:orientation="vertical"
+        android:layout_marginBottom="60dp"
         android:paddingLeft="60dp">
 
         <TextView
@@ -92,4 +95,21 @@
             app:start_degree="90"
             app:to_color="#00FF00"/>
     </LinearLayout>
+
+    <TextView
+        android:id="@+id/random_joke"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/countdown_layout_3"
+        android:paddingBottom="20dp"
+        android:paddingLeft="20dp"
+        android:paddingRight="20dp"
+        android:paddingTop="20dp"/>
+
+    <Button
+        android:id="@+id/button_toggle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/random_joke"
+        android:text="@string/button_toggle_stop"/>
 </RelativeLayout>

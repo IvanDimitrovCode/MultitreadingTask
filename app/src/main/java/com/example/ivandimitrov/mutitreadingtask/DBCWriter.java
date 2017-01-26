@@ -7,7 +7,6 @@ import android.database.sqlite.SQLiteDatabase;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
-import android.util.Log;
 
 /**
  * Created by Ivan Dimitrov on 1/26/2017.
@@ -46,12 +45,13 @@ public class DBCWriter extends Thread {
             @Override
             public void handleMessage(Message msg) {
                 String message = (String) msg.obj;
-                if (!isDatabaseFull) {
-                    writeToDB(message);
-                }
                 if (getDBJokeCount() >= DATABASE_MAX_LENGTH) {
                     isDatabaseFull = true;
                     mListener.onDBCWriterStop();
+                    Looper.myLooper().quit();
+                }
+                if (!isDatabaseFull) {
+                    writeToDB(message);
                 }
             }
         };
@@ -62,7 +62,6 @@ public class DBCWriter extends Thread {
     public long getDBJokeCount() {
         SQLiteDatabase db = mDbHelper.getReadableDatabase();
         long cnt = DatabaseUtils.queryNumEntries(db, FeedReaderContract.FeedEntry.TABLE_NAME);
-//        db.close();
         return cnt;
     }
 
