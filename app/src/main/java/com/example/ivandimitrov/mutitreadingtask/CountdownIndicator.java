@@ -12,22 +12,11 @@ import android.util.AttributeSet;
 import android.util.Log;
 import android.view.View;
 
-import java.io.PipedReader;
-import java.util.Timer;
-import java.util.TimerTask;
-
 /**
  * Created by Ivan Dimitrov on 1/23/2017.
  */
 
-/**
- * Circular countdown indicator. The indicator is a filled arc which starts as a full circle ({@code
- * 360} degrees) and shrinks to {@code 0} degrees the less time is remaining.
- *
- * @author klyubin@google.com (Alex Klyubin)
- */
 public class CountdownIndicator extends View {
-    public static final int TIMER_REFRESH_RATE = 20;
 
     public static final int DRAW_CLOCKWISE         = 101;
     public static final int DRAW_COUNTER_CLOCKWISE = 102;
@@ -39,14 +28,8 @@ public class CountdownIndicator extends View {
     private int   mFrom_color;
     private int   mTo_color;
     private int mDrawDirection = DRAW_CLOCKWISE;
-    public  int mTimerInterval = 5000;
 
-    private Timer mTimer;
 
-    /**
-     * Countdown phase starting with {@code 1} when a full cycle is remaining and shrinking to
-     * {@code 0} the closer the countdown is to zero.
-     */
     private double mPhase;
 
     public CountdownIndicator(Context context) {
@@ -184,62 +167,4 @@ public class CountdownIndicator extends View {
         mBorderPaint.setColor(Color.rgb((int) newColorRed, (int) newColorGreen, (int) newColorBlue));
         mRemainingSectorPaint.setColor(mBorderPaint.getColor());
     }
-
-    double mCurrentValue = 1;
-
-    public void startRefreshTimer() {
-        if (mTimer != null) {
-            mTimer.cancel();
-        }
-        mTimer = new Timer();
-        double stepsNeeded = mTimerInterval / TIMER_REFRESH_RATE;
-        double percent = 100 / stepsNeeded;
-        final double step = percent / 100;
-        mTimer.schedule(new TimerTask() {
-            @Override
-            public void run() {
-                ((MainActivity) getContext()).runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        mCurrentValue -= step;
-                        if (mCurrentValue < 0) {
-                            mCurrentValue = 1;
-                        }
-                        CountdownIndicator.this.setPhase(mCurrentValue);
-                    }
-                });
-            }
-        }, 0, TIMER_REFRESH_RATE);
-    }
-
-    public void setTimerInterval(int interval) {
-        mTimerInterval = interval;
-        startRefreshTimer();
-    }
-
-    void setOnTimerCompleateListener() {
-
-    }
-
-    private void standardColorChange() {
-        double percentage = getPercentage();
-        int red = 0;
-        int green = 255;
-        int blue = 0;
-        if (percentage > 50) {
-            double colorValue = (percentage - 50) * 2;
-            colorValue = 255 * (colorValue / 100);
-            red = 255 - (int) colorValue;
-        }
-        if (percentage < 50) {
-            red = 255;
-            double colorValue = percentage * 2;
-            colorValue = 255 * (colorValue / 100);
-            green = (int) colorValue;
-        }
-        mBorderPaint.setColor(Color.rgb(red, green, blue));
-        mRemainingSectorPaint.setColor(mBorderPaint.getColor());
-
-    }
-
 }

@@ -1,9 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-
     xmlns:app="http://schemas.android.com/apk/res-auto"
-
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/activity_main"
     android:layout_width="match_parent"
@@ -14,12 +12,19 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="com.example.ivandimitrov.mutitreadingtask.MainActivity">
 
+
     <LinearLayout
         android:id="@+id/countdown_layout_1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:paddingLeft="60dp"
+        android:orientation="vertical"
         >
+
+        <TextView
+            android:id="@+id/thread_name_1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/name_1"/>
 
         <com.example.ivandimitrov.mutitreadingtask.CountdownIndicator
             android:id="@+id/countdown_icon_1"
@@ -32,13 +37,21 @@
             app:to_color="#FF0000"/>
     </LinearLayout>
 
+
     <LinearLayout
         android:id="@+id/countdown_layout_2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_toRightOf="@id/countdown_layout_1"
-        android:paddingLeft="60dp"
-        >
+        android:orientation="vertical"
+        android:paddingLeft="60dp">
+
+        <TextView
+            android:id="@+id/thread_name_2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_above="@+id/countdown_layout_2"
+            android:text="@string/name_2"/>
 
         <com.example.ivandimitrov.mutitreadingtask.CountdownIndicator
             android:id="@+id/countdown_icon_2"
@@ -47,18 +60,26 @@
             android:layout_height="32dip"
             android:paddingLeft="20dp"
             app:draw_direction="clockwise"
-            app:from_color="#00FF00"
+            app:from_color="#FF0000"
             app:start_degree="90"
-            app:to_color="#FF0000"/>
+            app:to_color="#000000"/>
     </LinearLayout>
+
 
     <LinearLayout
         android:id="@+id/countdown_layout_3"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_toRightOf="@id/countdown_layout_2"
-        android:paddingLeft="60dp"
-        >
+        android:orientation="vertical"
+        android:paddingLeft="60dp">
+
+        <TextView
+            android:id="@+id/thread_name_3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:text="@string/name_3"/>
 
         <com.example.ivandimitrov.mutitreadingtask.CountdownIndicator
             android:id="@+id/countdown_icon_3"
@@ -67,8 +88,8 @@
             android:layout_height="32dip"
             android:layout_toRightOf="@id/countdown_icon_2"
             app:draw_direction="clockwise"
-            app:from_color="#00FF00"
+            app:from_color="#0000FF"
             app:start_degree="90"
-            app:to_color="#FF0000"/>
+            app:to_color="#00FF00"/>
     </LinearLayout>
 </RelativeLayout>
