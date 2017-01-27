@@ -31,6 +31,7 @@ public class DBCWriter extends Thread {
     private FeedReaderDbHelper mDbHelper;
     private ContentValues      mContentValues;
     private boolean isDatabaseFull = false;
+    private boolean isRunning      = false;
 
     DBCWriter(DBCWriterListener listener, Context context) {
         this.mListener = listener;
@@ -40,6 +41,7 @@ public class DBCWriter extends Thread {
     @Override
     public void run() {
         Looper.prepare();
+        isRunning = true;
         initDB();
         mHandler = new Handler() {
             @Override
@@ -47,16 +49,22 @@ public class DBCWriter extends Thread {
                 String message = (String) msg.obj;
                 if (getDBJokeCount() >= DATABASE_MAX_LENGTH) {
                     isDatabaseFull = true;
+                    isRunning = false;
                     mListener.onDBCWriterStop();
-                    Looper.myLooper().quit();
                 }
                 if (!isDatabaseFull) {
                     writeToDB(message);
                 }
             }
         };
-        mListener.onDBCWriterStart(mHandler);
+        if (getDBJokeCount() < DATABASE_MAX_LENGTH) {
+            mListener.onDBCWriterStart(mHandler);
+        }
         Looper.loop();
+    }
+
+    public void stopWriter() {
+        Looper.myLooper().quit();
     }
 
     public long getDBJokeCount() {

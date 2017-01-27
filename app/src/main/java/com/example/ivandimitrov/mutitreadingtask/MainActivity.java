@@ -24,6 +24,8 @@ public class MainActivity extends AppCompatActivity implements DBCWriter.DBCWrit
     private Button                   mToggleButton;
     private ScheduledExecutorService mScheduleTaskExecutor;
     private Future<?>                mFuture;
+    private DBCWriter                mDBCWriter;
+    private String                   mNewJoke;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,13 +46,20 @@ public class MainActivity extends AppCompatActivity implements DBCWriter.DBCWrit
                 }
             }
         });
-        new DBCWriter(this, this).start();
+        mDBCWriter = new DBCWriter(this, this);
+        mDBCWriter.start();
     }
 
     @Override
     protected void onResume() {
         super.onResume();
         startDBCReader();
+    }
+
+    private void startDBCReader() {
+        Runnable runnable = new DBCReader(this, this);
+        mScheduleTaskExecutor = Executors.newSingleThreadScheduledExecutor();
+        mFuture = mScheduleTaskExecutor.scheduleAtFixedRate(runnable, 0, 3, TimeUnit.SECONDS);
     }
 
     @Override
@@ -68,24 +77,26 @@ public class MainActivity extends AppCompatActivity implements DBCWriter.DBCWrit
         }
     }
 
-    private void startDBCReader() {
-        Runnable runnable = new DBCReader(this, this);
-        mScheduleTaskExecutor = Executors.newSingleThreadScheduledExecutor();
-        mFuture = mScheduleTaskExecutor.scheduleAtFixedRate(runnable, 0, 3, TimeUnit.SECONDS);
-    }
-
     @Override
     public void onDBCWriterStop() {
         for (CNTruthTask task : mWorkerThreadList) {
             task.stopThreadTimer();
         }
+        mDBCWriter.stopWriter();
     }
 
-    private void initAnimationList() {
-        mAnimationList.add(AnimationUtils.loadAnimation(MainActivity.this, R.anim.anim_fade));
-        mAnimationList.add(AnimationUtils.loadAnimation(MainActivity.this, R.anim.anim_rotate));
-        mAnimationList.add(AnimationUtils.loadAnimation(MainActivity.this, R.anim.anim_scale));
-        mAnimationList.add(AnimationUtils.loadAnimation(MainActivity.this, R.anim.anim_translate_right));
+    @Override
+    public void onReadFinish(String newJoke) {
+        mNewJoke = newJoke;
+        runOnUiThread(
+                new Runnable() {
+                    @Override
+                    public void run() {
+                        mRandomJokeView.clearAnimation();
+                        mRandomJokeView.startAnimation(getRandomAnimation());
+                    }
+                }
+        );
     }
 
     private Animation getRandomAnimation() {
@@ -100,7 +111,13 @@ public class MainActivity extends AppCompatActivity implements DBCWriter.DBCWrit
             @Override
             public void onAnimationEnd(Animation animation) {
                 mRandomJokeView.setText(mNewJoke);
-                mRandomJokeView.setBackgroundColor(getRandomColor());
+                int randomColor = getRandomColor();
+                mRandomJokeView.setBackgroundColor(randomColor);
+                if ((Color.red(randomColor) + Color.green(randomColor) + Color.blue(randomColor)) > 382) {
+                    mRandomJokeView.setTextColor(Color.BLACK);
+                } else {
+                    mRandomJokeView.setTextColor(Color.WHITE);
+                }
             }
 
             @Override
@@ -116,21 +133,10 @@ public class MainActivity extends AppCompatActivity implements DBCWriter.DBCWrit
         return Color.argb(255, rnd.nextInt(256), rnd.nextInt(256), rnd.nextInt(256));
     }
 
-    String mNewJoke;
-
-    @Override
-    public void onReadFinish(String newJoke) {
-        mNewJoke = newJoke;
-        runOnUiThread(
-                new Runnable() {
-                    @Override
-                    public void run() {
-                        mRandomJokeView.clearAnimation();
-                        mRandomJokeView.startAnimation(getRandomAnimation());
-
-                    }
-                }
-        );
+    private void initAnimationList() {
+        mAnimationList.add(AnimationUtils.loadAnimation(MainActivity.this, R.anim.anim_fade));
+        mAnimationList.add(AnimationUtils.loadAnimation(MainActivity.this, R.anim.anim_rotate));
+        mAnimationList.add(AnimationUtils.loadAnimation(MainActivity.this, R.anim.anim_scale));
+        mAnimationList.add(AnimationUtils.loadAnimation(MainActivity.this, R.anim.anim_translate_right));
     }
-
 }

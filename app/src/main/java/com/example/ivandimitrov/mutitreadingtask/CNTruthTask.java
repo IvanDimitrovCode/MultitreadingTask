@@ -36,8 +36,9 @@ public class CNTruthTask extends Thread {
     private String             mThreadName;
     private Handler            mDBCWriterHandler;
 
-    private double mCurrentValue  = 1;
-    private int    mTimerInterval = 5000;
+    private double  mCurrentValue  = 1;
+    private int     mTimerInterval = 5000;
+    private boolean isRunning      = false;
 
     public CNTruthTask(CountdownIndicator indicator, Activity activity, String name, Handler dBCWriterHandler) {
         this.mIndicator = indicator;
@@ -49,8 +50,9 @@ public class CNTruthTask extends Thread {
     @Override
     public void run() {
         Looper.prepare();
+        isRunning = true;
         Random timeGen = new Random();
-        setTimerInterval((timeGen.nextInt(9) + 1) * 1000);
+        setTimerInterval((timeGen.nextInt(2) + 1) * 1000);
         startRefreshTimer();
         mMessageHandler = new Handler();
         Looper.loop();
@@ -89,6 +91,7 @@ public class CNTruthTask extends Thread {
 
     public void stopThreadTimer() {
         mTimer.cancel();
+        isRunning = false;
         Looper.myLooper().quit();
     }
 
@@ -97,7 +100,9 @@ public class CNTruthTask extends Thread {
             @Override
             public void run() {
                 try {
-                    sendMassageToDBCWriter(sendPost());
+                    if (isRunning) {
+                        sendMassageToDBCWriter(sendPost());
+                    }
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
